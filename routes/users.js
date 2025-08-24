@@ -36,16 +36,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Create user and return JWT token
-router.post("/signup", upload.single("profilePic"), async (req, res) => {
-    const { name, email, password, deliveryAddress } = req.body;
+// router.post("/signup", upload.single("profilePic"), async (req, res) => { originally used single file upload
+
+    router.post("/signup", upload.fields([{ name: "profilePic", maxCount: 1 }]), async (req, res) => {
+  const { name, email, password, deliveryAddress, account } = req.body;
+
+  // 👇 Safely access uploaded file
+  const profilePicFile = req.files?.profilePic?.[0]?.filename;
 
     try {
         // Check if the email is already registered
         let user = await User.findOne({ email });
         if (user) {
             // Delete the uploaded file since the API was not successful
-            if (req.file) {
-                const filePath = path.join("upload", "profiles", req.filename);
+            // if (req.files) { originally used single file upload
+            if (profilePicFile) {
+                // const filePath = path.join("upload", "profiles", req.filename);
+                const filePath = path.join("upload", "profiles", profilePicFile);
                 fs.unlinkSync(filePath);
             }
 
@@ -60,7 +67,10 @@ router.post("/signup", upload.single("profilePic"), async (req, res) => {
             email,
             password,
             deliveryAddress,
-            profilePic: req.file ? req.filename : "default.jpg",
+            account,
+            // profilePic: req.file ? req.filename : "default.jpg", originally used single file upload
+            profilePic: profilePicFile || "default.jpg", 
+            isAdmin: false,            
         });
 
         // Hash the password
@@ -76,6 +86,9 @@ router.post("/signup", upload.single("profilePic"), async (req, res) => {
             "name",
             "email",
             "profilePic",
+            "deliveryAddress",
+            "password",
+            "account",
             "isAdmin",
         ]);
 
@@ -116,6 +129,9 @@ router.post("/login", async (req, res) => {
             "_id",
             "name",
             "email",
+            "deliveryAddress",
+            "password",
+            "account",
             "profilePic",
             "isAdmin",
         ]);

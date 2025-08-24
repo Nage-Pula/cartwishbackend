@@ -8,7 +8,7 @@
                 "description": "The iPhone 14 Pro is the latest flagship smartphone from Apple, featuring a stunning 6.1-inch OLED display, A16 Bionic chip, 128GB storage, and a triple-lens camera system. This phone also includes advanced features such as Face ID, wireless charging, and water resistance.",
                 "price": 1299,
                 "stock": 8,
-                "reviews": { "rate": 5, "counts": 50 },
+                "reviews": { "rate": 5, "counts": 100 },
                 "images": [
                     "iphone14pro-1.jpg",
                     "iphone14pro-2.jpg",

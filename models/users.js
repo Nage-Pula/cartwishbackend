@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    account: {
+        type: String,
+        required: true,
+        enum: ["basic", "standard", "premium", "enterprise"],
+    },
     profilePic: {
         type: String,
         default: "default.jpg",
